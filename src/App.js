@@ -10,7 +10,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import LogIn from "./pages/LogIn";
 import SignUp from "./pages/SignUp";
-import AboutUs from "./pages/AboutUs";
+import AboutUs1 from "./pages/AboutUs1";
 import GameProtectedIndex from "./pages/GameProtectedIndex";
 import Vance from "./pages/Vance";
 import Jess from "./pages/Jess";
@@ -20,8 +20,9 @@ import "./App.css";
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const url = "https://gamervault.onrender.com/"; //https://gamervault.onrender.com/ for deployment or http://localhost:3000 for local dev
+  const url = "http://localhost:3000"; //https://gamervault.onrender.com/ for deployment or http://localhost:3000 for local dev
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem("token");
@@ -39,6 +40,7 @@ const App = () => {
       .then((response) => response.json())
       .then((payload) => {
         setGames(payload);
+        setLoading(false);
       })
       .catch((error) => console.log(error));
   };
@@ -158,7 +160,13 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route
           path="/games"
-          element={<GameIndex games={games} deleteGame={deleteGame} />}
+          element={
+            <GameIndex
+              games={games}
+              deleteGame={deleteGame}
+              loading={loading}
+            />
+          }
         />
         <Route
           path="/game/:id"
@@ -196,7 +204,7 @@ const App = () => {
         />
         <Route path="/signup" element={<SignUp signup={signup} />} />
         <Route path="/login" element={<LogIn login={login} />} />
-        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/aboutus" element={<AboutUs1 />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/vance" element={<Vance />} />
         <Route path="/jess" element={<Jess />} />

@@ -46,5 +46,8 @@
       "!src/index.js",
       "!src/components/WhacADev.js"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.2"
   }
 }
