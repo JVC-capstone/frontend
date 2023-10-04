@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Card, CardBody, CardTitle, Button } from "reactstrap";
 import { NavLink, useLocation } from "react-router-dom";
 import SearchComponent from "../components/SearchComponent";
+import LoadingSpinner from "../components/LoadingSpinner";
 
-const GameIndex = ({ games, deleteGame }) => {
+const GameIndex = ({ games, deleteGame, loading }) => {
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredGames, setFilteredGames] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [reverseOrder, setReverseOrder] = useState(false);
 
-  const handleDelete = (id) => {
-    deleteGame(id);
-  };
+  // const handleDelete = (id) => {
+  //   deleteGame(id);
+  // };
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -66,65 +67,68 @@ const GameIndex = ({ games, deleteGame }) => {
       <div style={{ marginTop: "4rem" }}>
         <SearchComponent searchTerm={searchTerm} handleSearch={handleSearch} />
       </div>
-      <div style={{ display:"flex", justifyContent:"center", gap:"1rem" }}>
-  <label>
-    <input
-      type="radio"
-      name="sortType"
-      value="title"
-      checked={sortBy === "title"}
-      onChange={() => setSortBy("title")}
-    />
-    Sort by Title
-  </label>
-  <label>
-    <input
-      type="radio"
-      name="sortType"
-      value="date"
-      checked={sortBy === "date"}
-      onChange={() => setSortBy("date")}
-    />
-    Sort by Date Added
-  </label>
-  <label>
-    <input
-      type="checkbox"
-      checked={reverseOrder}
-      onChange={() => setReverseOrder(!reverseOrder)}
-    />
-    {reverseOrder ? "Order is reversed" : "Reverse Order"}
-  </label>
-</div>
-
-
-
-
-
-      <main className="card-columns">
-        {sortedGames.map((game, index) => {
-          return (
+      <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+        <label>
+          <input
+            type="radio"
+            name="sortType"
+            value="title"
+            checked={sortBy === "title"}
+            onChange={() => setSortBy("title")}
+          />
+          Sort by Title
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="sortType"
+            value="date"
+            checked={sortBy === "date"}
+            onChange={() => setSortBy("date")}
+          />
+          Sort by Date Added
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={reverseOrder}
+            onChange={() => setReverseOrder(!reverseOrder)}
+          />
+          {reverseOrder ? "Order is reversed" : "Reverse Order"}
+        </label>
+      </div>
+      {loading ? (
+        <div className="flex justify-center items-center min-h-screen">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <main className="card-columns">
+          {sortedGames.map((game, index) => (
             <div key={index}>
               <br />
               <br />
               <Card className="eachCard">
-                <img alt={`profile of the game ${game.title}`} src={game.image} />
+                <img
+                  alt={`profile of the game ${game.title}`}
+                  src={game.image}
+                />
                 <CardBody className="card-body">
-                  <CardTitle style={{ fontWeight: "600" }}>{game.title}</CardTitle>
+                  <CardTitle style={{ fontWeight: "600" }}>
+                    {game.title}
+                  </CardTitle>
                   <div className="button-container">
                     <Button className="pixel-btn">
                       <NavLink to={`/game/${game.id}`} className="nav-link">
                         See Game Details
                       </NavLink>
                     </Button>
-                    
                   </div>
                 </CardBody>
               </Card>
             </div>
-          );
-        })}
-      </main>
+          ))}
+        </main>
+      )}
     </div>
   );
 };
